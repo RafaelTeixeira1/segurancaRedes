@@ -1,0 +1,23 @@
+mkdir -p ~/wordlists ~/evidencias
+cat > ~/wordlists/passwords_mylist.txt <<'EOF'
+senha
+123456
+123456789
+palmeiras
+naotem
+mundial
+computer
+faculdade
+flamengo
+melhordo
+brasil
+linuxmint
+987654321
+654987321
+acer
+dell
+ifgoiano
+curintia
+EOF
+wc -l ~/wordlists/passwords_mylist.txt   # mostra quantas senhas
+
