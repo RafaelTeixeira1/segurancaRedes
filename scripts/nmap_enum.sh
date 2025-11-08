@@ -1,4 +1,3 @@
-cat > /home/kalilinux/Desktop/segurancaRedes/scripts/nmap_enum.sh <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
 # scripts/nmap_enum.sh (melhorada)
@@ -29,14 +28,3 @@ else
 fi
 
 echo "[*] Scan finalizado. Resultados: $OUTBASE.nmap  $OUTBASE.xml  $OUTBASE.gnmap"
-EOF
-
-chmod +x /home/kalilinux/Desktop/segurancaRedes/scripts/nmap_enum.sh
-
-# (opcional) commitar a mudança no repo
-cd /home/kalilinux/Desktop/segurancaRedes || true
-git add scripts/nmap_enum.sh
-git commit -m "Melhora nmap_enum.sh: timestamp, modo safe (default NSE), opção para -A; evita sobrescrita de resultados" || true
-
-echo "Arquivo atualizado e marcado como executável: /home/kalilinux/Desktop/segurancaRedes/scripts/nmap_enum.sh"
-
