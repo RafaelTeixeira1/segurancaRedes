@@ -162,7 +162,7 @@ bash scripts/nmap_enum.sh 192.168.56.101 evidencias
 
 ---
 
-### V#5 — Pendrive malicioso (simulação)
+### V#3 — Pendrive malicioso (simulação)
 
 ```bash
 # Na VM vítima
@@ -173,7 +173,7 @@ sudo bash scripts/simula_usb_and_execute.sh evidencias
 
 ---
 
-### V#6 — Navegação sem filtro
+### V#4 — Navegação sem filtro
 
 ```bash
 # Na VM atacante (ou vítima, dependendo do teste)
@@ -184,7 +184,7 @@ bash scripts/demo_web_unfiltered.sh http://example.com 30
 
 ---
 
-### V#3 — Restrição de privilégios (mitigação)
+### V#5 — Restrição de privilégios (mitigação)
 
 ```bash
 # Na VM vítima (após análise)
