@@ -1,264 +1,275 @@
-# 🔥 🛡️ Laboratório de Vulnerabilidades em Rede (VMs + Scripts)  
+# 🔰 Projeto Final — Segurança da Informação
 
-:triangular_flag_on_post: **Aviso:** Este repositório é para uso em ambiente controlado e rede isolada.
+**Diagnóstico e Mitigação de Vulnerabilidades em Laboratórios Educacionais**
 
-
-Projeto prático para a disciplina **Segurança da Informação** (6º período). Este repositório demonstra um cenário com duas VMs em rede isolada (atacante e vítima), exploração de vulnerabilidades (ex.: senha fraca/SSH), coleta de evidências, e hardening. Contém instruções passo a passo para criar as VMs, configurar a rede, executar os scripts e gerar os artefatos exigidos no trabalho.
-
-> **Alerta ético/legal:** todo o conteúdo é destinado a **ambiente controlado** e **rede isolada**. Não execute fora do laboratório.
-
----
-
-## 📚 Sumário
-- [Arquitetura do laboratório](#arquitetura-do-laboratório)
-- [Pré‑requisitos](#pré-requisitos)
-- [Topologia e Rede Isolada](#topologia-e-rede-isolada)
-- [Criação das VMs (VirtualBox)](#criação-das-vms-virtualbox)
-  - [VM Vítima](#vm-vítima)
-  - [VM Atacante](#vm-atacante)
-  - [IPs estáticos](#ips-estáticos)
-  - [Notas importantes](#notas-importantes)
-- [Provisionamento das VMs](#provisionamento-das-vms)
-- [Scripts e Execução](#scripts-e-execução)
-  - [1) Enumeração de Rede — `nmap_enum.sh`](#1-enumeração-de-rede--nmap_enumsh)
-  - [2) Ataque SSH (bruteforce) — `ssh_bruteforce.sh` e `ssh_try_sequential.sh`](#2-ataque-ssh-bruteforce--ssh_bruteforcesh-e-ssh_try_sequentialsh)
-  - [3) Captura de Tráfego SSH — `capture_ssh_traffic.sh`](#3-captura-de-tráfego-ssh--capture_ssh_trafficsh)
-  - [4) Coleta de Evidências — `coleta_evidencias.sh`](#4-coleta-de-evidências--coleta_evidenciassh)
-  - [5) Simulação de USB e Execução — `simula_usb_and_execute.sh`](#5-simulação-de-usb-e-execução--simula_usb_and_executesh)
-- [Padrão de Evidências e Reprodutibilidade](#padrão-de-evidências-e-reprodutibilidade)
-- [Hardening (mitigações)](#hardening-mitigações)
-- [Estrutura do Repositório](#estrutura-do-repositório)
-- [Modelos de Documentos (docs/)](#modelos-de-documentos-docs)
-- [FAQ / Troubleshooting](#faq--troubleshooting)
-- [Licença](#licença)
+**Curso:** Bacharelado em Sistemas de Informação (6º período)  
+**Disciplina:** Segurança da Informação  
+**Entrega:** 03/11/2025  
+**Versão:** 1.0
 
 ---
 
-## Arquitetura do laboratório
+## 🧭 Sumário
+
+- Introdução e Propósito  
+- Arquitetura e Estrutura do Projeto  
+- Cenário Simulado  
+- Vulnerabilidades Investigadas  
+- Configuração e Preparação do Ambiente  
+- Execução e Procedimentos  
+- Análise Prática e Resultados  
+- Documentos e Relatórios Complementares  
+- Equipe Responsável  
+- Aspectos Éticos e Conformidade  
+- Direitos, Licença e Uso
+
+---
+
+## 🧩 Introdução e Propósito
+
+Este projeto tem como foco a análise, demonstração e mitigação de vulnerabilidades reais encontradas em laboratórios de informática acadêmicos. A simulação reproduz um acesso indevido via SSH provocado por falhas humanas e técnicas, e demonstra boas práticas de *hardening* e governança.
+
+**Objetivos principais:**
+
+- Identificar falhas de configuração e comportamento inseguro de usuários;  
+- Demonstrar ataques em ambiente controlado (máquinas virtuais isoladas);  
+- Coletar evidências técnicas e elaborar relatório de auditoria;  
+- Propor medidas de mitigação e políticas de segurança para ambientes educacionais.
+
+---
+
+## 🧱 Arquitetura e Estrutura do Projeto
 
 ```
-┌────────────────────┐        Rede Isolada (Host-Only/Internal)
-│  VM Atacante       │        Sub-rede: 192.168.56.0/24
-│  (Kali/Ubuntu)     │  ─────────────── vboxnet1 / "labnet" ───────────────▶  (Sem acesso à Internet)
-│  IP: 192.168.56.10 │
-└────────────────────┘                                             
-┌────────────────────┐
-│  VM Vítima         │
-│  (Ubuntu/Mint)     │
-│  IP: 192.168.56.23 │
-└────────────────────┘
+segurancaRedes/
+├── README.md                        # Documentação principal
+├── scripts/                         # Scripts de ataque e mitigação
+│   ├── nmap_enum.sh                 # Enumeração de portas/serviços
+│   ├── ssh_bruteforce.sh            # Ataque SSH por força bruta
+│   ├── simula_usb_and_execute.sh    # Execução via pendrive malicioso
+│   ├── demo_web_unfiltered.sh       # Navegação sem filtragem
+│   ├── create_restricted_user.sh    # Restrição de privilégios
+│   ├── capture_ssh_traffic.sh       # Captura de tráfego SSH
+│   └── coleta_evidencias.sh         # Coleta padronizada de evidências
+├── wordlists/                       # Wordlists (minhaLista.txt)
+├── evidencias/                      # Saídas dos experimentos (pcap, logs, hashes)
+├── docs/                            # Relatórios e políticas
+│   ├── RELATORIO_AUDITORIA.md
+│   ├── politicas/POLITICA_SEGURANCA.md
+│   └── diagramas/
+└── apresentacao/
+    └── SLIDES_APRESENTACAO.md
 ```
 
-- **Isolamento**: a rede do laboratório **não** deve ter rota para a Internet.
-- **Objetivo**: demonstrar exploração de vulnerabilidades (ex.: senha fraca via SSH) e posterior **hardening** (chaves SSH, MFA, fail2ban, etc.).
+---
 
-## Pré‑requisitos
+## 💡 Cenário Simulado
 
-- VirtualBox 7.x (ou equivalente)
-- ISOs das distribuições desejadas (ex.: Ubuntu/Mint p/ vítima; Kali/Ubuntu p/ atacante)
-- 30–40 GB livres de disco; 8 GB RAM (recomendado)
-- Acesso de administrador no host
+Um aluno observou a senha SSH de um professor e a utilizou para acessar remotamente o sistema do docente. O cenário serve para demonstrar riscos humanos e técnicos em laboratórios compartilhados.
 
-## Topologia e Rede Isolada
+**Impactos observados:**
 
-Escolha **um** modo de rede VirtualBox para **isolar** o laboratório:
+- Comprometimento da confidencialidade de dados docentes;  
+- Alteração não autorizada de arquivos institucionais;  
+- Exposição de falhas na política de autenticação;  
+- Fragilidade do ambiente usado por múltiplos perfis.
 
-1. **Host‑Only (recomendado)**
-   - Crie/adapte a interface `vboxnet1` com faixa `192.168.56.0/24`.
-   - As VMs comunicam entre si e com o host, **sem** Internet.
-2. **Internal Network** (nome sugerido: `labnet`)
-   - Comunicação **apenas** entre VMs no mesmo rótulo de rede interna.
+---
 
-> Para baixar pacotes em instalação/provisionamento, use **temporariamente** um segundo adaptador `NAT` e **desative** após a configuração.
+## 🧨 Vulnerabilidades Investigadas
 
-### Criando/adaptando a `vboxnet1` (opcional)
+| ID  | Categoria              | Descrição                                            | Severidade | Script / Ferramenta                         |
+|-----|------------------------|------------------------------------------------------|------------|---------------------------------------------|
+| V#1 | Autenticação           | Senhas fracas e ausência de MFA em SSH               | Crítica    | `ssh_bruteforce.sh`                          |
+| V#2 | Exposição de serviços  | Portas abertas e serviços desnecessários             | Alta       | `nmap_enum.sh`                               |
+| V#3 | Privilégios            | Contas locais com privilégios indevidos              | Crítica    | `create_restricted_user.sh`                  |
+| V#4 | Forense / Evidência    | Ausência de procedimentos de coleta de evidências    | Alta       | `coleta_evidencias.sh`                       |
+| V#5 | Dispositivos removíveis| Execução automática via pendrive                      | Alta       | `simula_usb_and_execute.sh`                  |
+| V#6 | Conteúdo não filtrado  | Acesso a sites sem filtragem (uso indevido)          | Média      | `demo_web_unfiltered.sh`                     |
+
+---
+
+## ⚙️ Configuração e Preparação do Ambiente
+
+**Plataforma:** VirtualBox (recomendado) — ambientes isolados Host-Only / Internal Network.
+
+**Topologia sugerida (Host-Only / labnet):**
+
+| Função    | SO         | IP             | Usuário     | Senha      |
+|-----------|------------|----------------|-------------|------------|
+| Atacante  | Kali/Ubuntu|`192.168.56.100`| `kalilinux` | `kalilinux`|
+| Vítima    | Linux Mint |`192.168.56.101`  | `linuxmint` | `linuxmint`|
+
+> **Importante:** mantenha a rede isolada (sem rota para a Internet) durante os testes. Use um adaptador NAT **temporariamente** para instalar pacotes e remova-o depois.
+
+### Instalação e dependências (ambas as VMs)
 
 ```bash
-# Em sistemas com VBoxManage disponível
-VBoxManage hostonlyif create || true
-VBoxManage hostonlyif ipconfig vboxnet1 --ip 192.168.56.1 --netmask 255.255.255.0
+sudo apt update
+sudo apt install -y nmap hydra sshpass tcpdump curl dosfstools git build-essential
 ```
 
-## Criação das VMs (VirtualBox)
+### Clonagem do repositório
 
-### VM Vítima
-- **Nome**: `vitima`
-- **SO**: Ubuntu/Mint 64‑bit
-- **CPU/RAM**: 2 vCPUs / 2–4 GB RAM
-- **Disco**: 40 GB (dinâmico)
-- **Rede**:
-  - Adaptador 1: **Host‑Only** (`vboxnet1`) ou **Internal Network** (`labnet`)
-  - (Opcional) Adaptador 2: **NAT** apenas para instalação de pacotes (remover ao final)
-- **Serviços**: OpenSSH Server instalado
+```bash
+git clone https://github.com/<usuario>/segurancaRedes.git
+cd segurancaRedes
+chmod +x scripts/*.sh
+```
 
-### VM Atacante
-- **Nome**: `atacante`
-- **SO**: Kali Linux/Ubuntu 64‑bit
-- **CPU/RAM**: 2 vCPUs / 2–4 GB RAM
-- **Disco**: 40 GB
-- **Rede**: Idêntica à vítima (Host‑Only/Internal Network) + NAT temporário se necessário
-- **Ferramentas**: `nmap`, `hydra`, `tcpdump`, `wireshark-cli`, `netcat`, etc.
+### IP estático (exemplo — Netplan no Ubuntu/Mint)
 
-### IPs estáticos
+Crie `/etc/netplan/01-lab.yaml`:
 
-Configure IPs **estáticos** nas VMs (exemplo para `192.168.56.0/24`):
-
-- Atacante: `192.168.56.10/24`, gateway vazio, DNS vazio
-- Vítima: `192.168.56.23/24`, gateway vazio, DNS vazio
-
-> Em Ubuntu/Mint (Netplan), arquivo típico em `/etc/netplan/01-lab.yaml`:
 ```yaml
 network:
   version: 2
   ethernets:
     enp0s3:
-      addresses: [192.168.56.23/24]
+      addresses: [192.168.56.101/24]
       dhcp4: false
 ```
 
-### Notas importantes
-- **Erro de virtualização/KVM** em hosts Linux: certifique-se de que **somente o VirtualBox** use VT‑x/AMD‑V; desative módulos KVM no host antes de iniciar as VMs se necessário.
-- Mantenha snapshots: `base` (antes da exploração), `explotado`, `hardened`.
-
-## Provisionamento das VMs
-
-Copie os scripts deste repositório para cada VM e torne executáveis:
+Aplique:
 
 ```bash
-chmod +x attacker_provision.sh victim_provision.sh
+sudo netplan apply
 ```
 
-### Vítima
-Na VM **vítima**:
+---
+
+## 🧪 Execução e Procedimentos
+
+> Coloque todas as saídas em pastas de evidências com timestamp: `evidencias/2025-11-03_120000_acao/`
+
+### V#1 — Ataque SSH por força bruta (exemplo)
+
 ```bash
-sudo ./victim_provision.sh
-# Confirme que o SSH está ativo e (intencionalmente) com configurações frágeis para o cenário inicial.
+# Na VM atacante
+bash scripts/ssh_bruteforce.sh 192.168.56.101 linuxmint wordlists/minhaLista.txt evidencias
 ```
 
-### Atacante
-Na VM **atacante**:
+**Resultado esperado:** descoberta de senha fraca e autenticação indevida.
+
+---
+
+### V#2 — Enumeração de portas e serviços
+
 ```bash
-sudo ./attacker_provision.sh
-# Instala ferramentas necessárias (nmap, hydra, tcpdump etc.)
+# Na VM atacante
+bash scripts/nmap_enum.sh 192.168.56.101 evidencias
 ```
 
-> Reaplique provisionamento quando restaurar snapshots ou trocar adaptadores de rede.
+**Resultado esperado:** lista de portas (ex.: 22) e serviços que podem ser vetores.
 
-## 🧰 Scripts e Execução
+---
 
-> Todos os scripts devem estar com `chmod +x` e, quando necessário, executados com `sudo`.
+### V#5 — Pendrive malicioso (simulação)
 
-### 1) 🔎 Enumeração de Rede — `nmap_enum.sh`
-
-**Objetivo:** descobrir hosts, portas e serviços na sub-rede do laboratório.
-
-Uso típico (na VM **atacante**):
 ```bash
-./nmap_enum.sh 192.168.56.0/24 /home/$(whoami)/evidencias
+# Na VM vítima
+sudo bash scripts/simula_usb_and_execute.sh evidencias
 ```
-Saídas esperadas: relatórios `nmap_*.txt` em `/home/<user>/evidencias`.
 
-### 2) 🧨 Ataque SSH (bruteforce) — `ssh_bruteforce.sh` e `ssh_try_sequential.sh`
+**Resultado:** script foi executado automaticamente (simulação), demonstrando risco.
 
-**Objetivo:** demonstrar risco de **senhas fracas**.
+---
 
-Crie/valide a wordlist (ex.: `minhaLista.txt` neste repo ou sua lista em `~/wordlists/passwords_mylist.txt`).
+### V#6 — Navegação sem filtro
 
-Execução (na VM **atacante**):
 ```bash
-# Hydra (paralelo):
-./ssh_bruteforce.sh 192.168.56.23 usuario_da_vitima /home/$(whoami)/wordlists/minhaLista.txt /home/$(whoami)/evidencias 4
-
-# Sequencial (script simples):
-./ssh_try_sequential.sh 192.168.56.23 usuario_da_vitima /home/$(whoami)/wordlists/minhaLista.txt /home/$(whoami)/evidencias 5
+# Na VM atacante (ou vítima, dependendo do teste)
+bash scripts/demo_web_unfiltered.sh http://example.com 30
 ```
-Saídas esperadas: logs/relatórios com tentativas e (se houver) credenciais válidas.
 
-> **Dica:** ajuste `TIMEOUT`, threads (Hydra) e duração de captura para não sobrecarregar a VM vítima.
+**Resultado:** captura de tráfego web / páginas acessadas.
 
-### 3) 🕵️ Captura de Tráfego SSH — `capture_ssh_traffic.sh`
+---
 
-**Objetivo:** registrar tráfego da sessão SSH (metadados) enquanto ocorrem ataques/autenticações para fins de evidência.
+### V#3 — Restrição de privilégios (mitigação)
 
-Uso:
 ```bash
-sudo ./capture_ssh_traffic.sh enp0s3 60 /home/$(whoami)/evidencias
-# Captura pcap de 60s; ajuste a interface conforme a VM (ex.: enp0s3)
+# Na VM vítima (após análise)
+sudo bash scripts/create_restricted_user.sh novo_usuario
 ```
-Saída: `web_capture_*.pcap` ou `ssh_capture_*.pcap` em evidências.
 
-### 4) 📁 Coleta de Evidências — `coleta_evidencias.sh`
+**Resultado:** usuário com shell restrito, sem sudo nem acesso a dispositivos removíveis.
 
-**Objetivo:** padronizar a **cadeia de custódia**: coletar logs (`auth.log`), configs SSH (`/etc/ssh/sshd_config`), permissões, usuários, etc., de forma **não-destrutiva**.
+---
 
-Na VM **vítima** (pós-ataque):
+### Coleta padronizada de evidências
+
 ```bash
-sudo ./coleta_evidencias.sh /home/$(whoami)/evidencias
-```
-Saídas: diretório com timestamp contendo cópias de logs, checksums e inventário do sistema.
-
-### 5) 💾 Simulação de USB e Execução — `simula_usb_and_execute.sh`
-
-**Objetivo:** simular introdução de mídia removível e execução automática de binário/script para demonstrar risco de políticas frágeis de mídia removível.
-
-Uso (na **vítima**):
-```bash
-sudo ./simula_usb_and_execute.sh /home/$(whoami)/evidencias
-```
-Saídas: evidências e logs de execução simulada.
-
-## Padrão de Evidências e Reprodutibilidade
-
-- Nomeie pastas de evidência com **timestamp**: `evidencias/AAAA-MM-DD_HHMMSS_acao`.
-- Gere **hashes (SHA256)** para arquivos de interesse.
-- Exporte relatórios (`.txt`, `.pcap`, `.log`) e mantenha um `README_EVIDENCIAS.md` dentro de cada pasta explicando **quando**, **como** e **por quê** foram coletadas.
-- **Snapshots**: mantenha `base`, `explorado` e `hardened` para repetibilidade.
-
-## Hardening (mitigações)
-
-Após comprovar a exploração, aplique mitigação na **vítima**:
-
-- SSH: desativar `PasswordAuthentication yes` → usar **chaves**; considerar **MFA** (PAM/Authenticator)
-- Senhas: política de complexidade + expiração
-- Bloqueios: `fail2ban`/`pam_tally2` para tentativas
-- Privilégios: remover `sudo` indevido; aplicar **least privilege**
-- Atualizações: manter sistema e pacotes atualizados
-- Permissões: remover **world-writable** em diretórios sensíveis
-- USB: bloquear automount e execução automática (udev/políticas)
-
-> Re-execute os testes para comprovar que as vulnerabilidades foram mitigadas.
-
-## Estrutura do Repositório
-
-```
-.
-├── scripts/
-│   ├── attacker_provision.sh
-│   ├── victim_provision.sh
-│   ├── nmap_enum.sh
-│   ├── ssh_bruteforce.sh
-│   ├── ssh_try_sequential.sh
-│   ├── capture_ssh_traffic.sh
-│   └── coleta_evidencias.sh
-├── wordlists/
-│   └── minhaLista.txt
-├── evidencias/              # (gerado em execução)
-├── docs/
-│   ├── Relatorio_Auditoria_Forense.md
-│   ├── Plano_Politicas.md
-│   ├── Treinamento_Professores.md
-│   ├── Treinamento_Alunos.md
-│   └── Apresentacao.md
-└── README.md
+# Na VM vítima (após o incidente)
+sudo bash scripts/coleta_evidencias.sh evidencias
+# Gera: cópias de /var/log/auth.log, sshd_config, inventário, checksums (SHA256)
 ```
 
-## FAQ / Troubleshooting
+**Boas práticas:** não alterar logs originais; copiar e calcular hashes; documentar cadeia de custódia.
 
-- **Sem conectividade entre VMs**: verifique se ambas estão na **mesma rede** Host‑Only/Internal, e se os IPs estão no **mesmo /24**.
-- **Não consegue instalar pacotes**: habilite temporariamente Adaptador 2: **NAT**; depois **remova** para manter o isolamento.
-- **Erro de virtualização (KVM/VMX)**: em hosts Linux, descarregue módulos `kvm_intel`/`kvm_amd` antes de usar VirtualBox.
-- **Hydra lento**: reduza threads, aumente TIMEOUT ou use o modo sequencial para logs mais legíveis.
+---
 
-## Licença
+## 📊 Análise Prática e Resultados
 
-Uso acadêmico/educacional. Ajuste conforme a política da instituição.
+**Antes do hardening**
+
+- SSH acessível por senha simples;  
+- Múltiplos serviços desnecessários expostos;  
+- Contas com privilégios excessivos;  
+- Políticas de mídia removível e monitoramento ausentes.
+
+**Após mitigação**
+
+- Autenticação SSH reforçada (chaves + desabilitar `PasswordAuthentication`);  
+- `fail2ban` implementado;  
+- Serviços desnecessários desativados;  
+- Privilégios revisados;  
+- Política de uso de USB e bloqueio de execução automática.
+
+
+---
+
+## 🧾 Documentos e Relatórios Complementares
+
+| Documento | Descrição |
+|---|---|
+| `docs/RELATORIO_AUDITORIA.md` | Relatório completo de auditoria e evidências forenses |
+| `docs/politicas/POLITICA_SEGURANCA.md` | Política de uso e boas práticas laboratoriais |
+| `docs/diagramas/rede.png` | Diagrama de rede e fluxo de ataque/mitigação |
+| `apresentacao/SLIDES_APRESENTACAO.md` | Material para defesa e arguição |
+
+---
+
+## 👥 Equipe Responsável
+
+| Nome | Função | Contribuição |
+|---:|---|---|
+| Rafael Teixeira | Estudante | Scripts, ambiente e evidências |
+| Jhannyfer Biângulo | Estudante | Relatórios, mitigação e documentação |
+
+---
+
+## 🧩 Aspectos Éticos e Conformidade
+
+Este trabalho foi desenvolvido em ambiente controlado com finalidade educacional. Demonstrações seguiram princípios de ética digital.
+
+**Boas práticas adotadas:**
+
+- Isolamento das VMs (Host-Only / Internal);  
+- Senhas e dados substituídos por valores fictícios;  
+- Nenhum sistema externo foi impactado.
+
+**Aviso legal:** uso inadequado fora do ambiente controlado pode configurar crime previsto na Lei nº 12.737/2012 (Lei Carolina Dieckmann) e no Art. 154-A do Código Penal.
+
+---
+
+---
+
+## 📅 Finalização
+
+**Data de Conclusão (estimada):** Novembro/2025  
+**Instituição:** Instituto Federal Goiano - Campus Ceres;  
+**Professor Orientador:** Roitier Campos Goncalves
+
+---
+
