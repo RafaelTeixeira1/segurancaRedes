@@ -57,8 +57,6 @@ segurancaRedes/
 │   ├── RELATORIO_AUDITORIA.md
 │   ├── politicas/POLITICA_SEGURANCA.md
 │   └── diagramas/
-└── apresentacao/
-    └── SLIDES_APRESENTACAO.md
 ```
 
 ---
