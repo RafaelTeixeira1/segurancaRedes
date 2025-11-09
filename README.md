@@ -228,28 +228,6 @@ Após comprovar a exploração, aplique mitigação na **vítima**:
 
 > Re-execute os testes para comprovar que as vulnerabilidades foram mitigadas.
 
-## 🎨 Assets — Ícones (SVG + PNG)
-
-Coloquei ícones leves em `icons/` (SVG preferido, PNG como fallback). Salve os arquivos do diretório `/mnt/data/icons` no seu repositório como `icons/`.
-
-Exemplos de uso no README ou páginas Markdown:
-
-```markdown
-![Escudo](icons/shield.svg)  <!-- SVG preferido -->
-![Fogo](icons/fire.png)      <!-- PNG fallback -->
-```
-
-Pequena galeria (sugestão):
-
-| Ícone | Uso sugerido |
-|---|---|
-| ![shield](icons/shield.svg) | Cabeçalho / Segurança |
-| ![fire](icons/fire.svg)     | Avisos / Vulnerabilidade |
-| ![bug](icons/bug.svg)       | Bugs / Exploração |
-| ![usb](icons/usb.svg)       | Mídia removível / USB |
-| ![packet](icons/packet.svg) | Captura de tráfego / PCAP |
-| ![folder](icons/folder.svg) | Pastas de evidências |
-
 ## Estrutura do Repositório
 
 ```
