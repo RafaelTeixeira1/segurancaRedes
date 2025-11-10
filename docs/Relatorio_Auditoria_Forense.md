@@ -1,45 +1,35 @@
-# Relatório de Auditoria e Análise Forense
+# 🧾 Relatório de Auditoria e Análise Forense
 
+## 🕵️‍♂️ Introdução
+Relatório referente à auditoria e análise forense realizadas nas máquinas:
+- **Atacante (Kali Linux)** — 192.168.56.100  
+- **Vítima (Linux Mint Vulnerável)** — 192.168.56.101  
+- **Vítima Hardened (Linux Mint Segura)** — 192.168.56.102  
 
-## 1. Análise de Vulnerabilidades e Vetores de Ataque
-### 1.1 Vulnerabilidades Identificadas
-- Senha fraca/previsível (SSH)
-- Ausência de MFA
-- Permissividade de rede/serviços expostos
-- World-writable / permissões frágeis
-- Usuários com privilégio excessivo
-- Sistemas desatualizados
+## ⚙️ Metodologia
+1. **Mapeamento** — `enumerar_rede.sh`, `explorar_vulnerabilidades.sh`  
+2. **Ataques controlados** — `ssh_bruteforce.sh`  
+3. **Análise forense** — `coleta_evidencias.sh`
 
+## 📁 Evidências Coletadas
+Evidências armazenadas em `/home/kalilinux/Desktop/segurancaRedes/evidencias`, incluindo:
+- `/var/log/auth.log`
+- Metadados de arquivos alterados
+- Histórico de comandos
 
-### 1.2 Vetores de Ataque
-- Engenharia social / observação de credenciais
-- Acesso remoto via SSH mal configurado
-- Execução local (USB/mídia removível)
+## 🧩 Principais Vulnerabilidades
+| Vulnerabilidade | Impacto | Evidência |
+|------------------|----------|-----------|
+| Senhas fracas e repetidas | Alta | 03_SSH_BRUTEFORCE_*.log |
+| Usuário com privilégios administrativos | Alta | sudoers_conf.txt |
+| Diretórios world-writable | Média | world_writable_dirs.txt |
+| Falta de patching | Média | apt_list_outdated.txt |
 
+## 🧰 Medidas de Mitigação
+- Políticas de senha forte;  
+- Restrição de privilégios administrativos;  
+- Atualizações automáticas semanais;  
+- Autenticação SSH via chave pública.
 
-### 1.3 Mapeamento de Vulnerabilidades
-- Diagrama de rede + tabela de serviços expostos
-
-
-## 2. Análise Forense Digital e Resposta a Incidentes
-### 2.1 Cadeia de Custódia
-- Procedimento de coleta
-- Hashes, timestamps, cópias forenses
-
-
-### 2.2 Análise de Logs
-- `auth.log`, `secure`, `journalctl -u ssh`
-- IP de origem, horários, usuário comprometido
-
-
-## 3. Análise de Riscos e Impactos
-### 3.1 Impacto na Instituição
-- Reputação, custos, políticas
-
-
-### 3.2 Impacto Humano
-- Privacidade, exposição, ética
-
-
-## 4. Evidências
-- Lista de arquivos, localizações, hashes
+## 📜 Conclusão
+O ambiente vulnerável comprovou seu papel didático, e a versão “hardened” apresentou mitigação eficaz das falhas encontradas.
