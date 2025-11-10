@@ -5,7 +5,7 @@
 **Curso:** Bacharelado em Sistemas de Informação (6º período)  
 **Disciplina:** Segurança da Informação  
 **Entrega:** 03/11/2025  
-**Versão:** 1.0
+**Versão:** 1.1 (atualizada com Hardening)
 
 ---
 
@@ -17,6 +17,7 @@
 - Vulnerabilidades Investigadas  
 - Configuração e Preparação do Ambiente  
 - Execução e Procedimentos  
+- 🛡️ Hardening e Mitigação  
 - Análise Prática e Resultados  
 - Documentos e Relatórios Complementares  
 - Equipe Responsável  
@@ -50,7 +51,8 @@ segurancaRedes/
 │   ├── demo_web_unfiltered.sh       # Navegação sem filtragem
 │   ├── create_restricted_user.sh    # Restrição de privilégios
 │   ├── capture_ssh_traffic.sh       # Captura de tráfego SSH
-│   └── coleta_evidencias.sh         # Coleta padronizada de evidências
+│   ├── coleta_evidencias.sh         # Coleta padronizada de evidências
+│   └── hardening_lab.sh             # Endurecimento (mitigação automática)
 ├── wordlists/                       # Wordlists (minhaLista.txt)
 ├── evidencias/                      # Saídas dos experimentos (pcap, logs, hashes)
 ├── docs/                            # Relatórios e políticas
@@ -207,6 +209,61 @@ sudo bash scripts/coleta_evidencias.sh evidencias
 
 ---
 
+## 🛡️ Hardening e Mitigação
+
+Após os ataques e a coleta de evidências, é realizada a fase de **Hardening**, que visa corrigir as vulnerabilidades exploradas e aplicar políticas de segurança robustas.
+
+### 🔧 Execução do Hardening
+
+O script automatizado `scripts/hardening_lab.sh` realiza todas as medidas de mitigação. Execute-o na máquina vítima:
+
+```bash
+sudo bash scripts/hardening_lab.sh
+```
+
+### 📋 Ações realizadas
+
+| Categoria | Descrição |
+|------------|------------|
+| **Atualizações** | Instala pacotes e patches de segurança. |
+| **SSH Seguro** | Desativa login root, troca porta padrão e força uso de chaves. |
+| **Firewall (UFW)** | Bloqueia tráfego externo e libera apenas sub-rede administrativa. |
+| **Fail2Ban** | Monitora logins e bloqueia tentativas maliciosas. |
+| **PAM / Políticas de Senha** | Impõe complexidade mínima e expiração periódica. |
+| **Auditd** | Cria trilha de auditoria e registra eventos críticos. |
+| **Banners Legais** | Exibe aviso de uso autorizado e monitoramento. |
+| **Filesystem Seguro** | Aplica flags `noexec`, `nodev`, `nosuid` em partições temporárias. |
+
+### 🧰 Validação pós-hardening
+
+Após a execução, verificar os seguintes pontos:
+
+```bash
+sshd -T | grep -E "port|permitrootlogin|passwordauthentication"
+sudo ufw status verbose
+sudo fail2ban-client status sshd
+sudo auditctl -l | head
+```
+
+### 📁 Evidências pós-hardening
+
+Crie a pasta:
+```bash
+mkdir -p evidencias/HARDENING_$(date +%Y%m%d_%H%M%S)
+```
+
+E colete as validações:
+```bash
+sudo ss -tlnp > evidencias/HARDENING/ssh_ports.txt
+sudo ufw status verbose > evidencias/HARDENING/firewall_status.txt
+sudo fail2ban-client status > evidencias/HARDENING/fail2ban.txt
+sudo auditctl -l > evidencias/HARDENING/auditd_rules.txt
+```
+
+Esses arquivos servem como comprovação técnica para o relatório de auditoria (`docs/RELATORIO_AUDITORIA.md`).
+
+---
+
 ## 📊 Análise Prática e Resultados
 
 **Antes do hardening**
@@ -223,7 +280,6 @@ sudo bash scripts/coleta_evidencias.sh evidencias
 - Serviços desnecessários desativados;  
 - Privilégios revisados;  
 - Política de uso de USB e bloqueio de execução automática.
-
 
 ---
 
@@ -261,13 +317,9 @@ Este trabalho foi desenvolvido em ambiente controlado com finalidade educacional
 
 ---
 
----
-
 ## 📅 Finalização
 
 **Data de Conclusão (estimada):** Novembro/2025  
-**Instituição:** Instituto Federal Goiano - Campus Ceres;  
-**Professor Orientador:** Roitier Campos Goncalves
-
----
+**Instituição:** Instituto Federal Goiano - Campus Ceres  
+**Professor Orientador:** Roitier Campos Gonçalves
 
