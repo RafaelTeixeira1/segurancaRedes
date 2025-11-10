@@ -1,19 +1,33 @@
-# Plano de Ação, Políticas e Conscientização
+# 🧭 Plano e Políticas de Segurança da Informação
 
+## 📋 Objetivo
+Estabelecer diretrizes e boas práticas para garantir a **confidencialidade**, **integridade** e **disponibilidade** das informações nos ambientes de rede do laboratório.
 
-## 1. Plano de Ação
-- Priorização (RISCO x IMPACTO)
-- Cronograma de mitigação
+## 🧩 Escopo
+Aplica-se a todos os **usuários, docentes e discentes** que utilizam as máquinas físicas e virtuais do laboratório. Inclui:
+- Políticas de autenticação e controle de acesso;
+- Manuseio de dispositivos externos (USB, mídias removíveis);
+- Procedimentos de atualização e monitoramento;
+- Política de coleta e armazenamento de evidências digitais.
 
+## 🔐 Diretrizes Gerais
+### 1. Controle de Acesso
+- Cada usuário deve possuir credenciais únicas e intransferíveis;
+- Senhas fracas ou compartilhadas são proibidas;
+- Acesso root/sudo é restrito a administradores.
 
-## 2. Políticas de Segurança (Uso Aceitável)
-- Acessos, senhas, privilégios, mídia removível, logs
+### 2. Gestão de Vulnerabilidades
+- Atualizações semanais obrigatórias;
+- Logs mantidos por 90 dias;
+- Execução de scripts de verificação automatizada.
 
+### 3. Uso de Mídias Removíveis
+- Proibido conectar dispositivos USB pessoais;
+- Simulações controladas via `simula_usb_and_execute.sh`.
 
-## 3. Treinamento
-### 3.1 Professores
-- Proteção de dados, senhas, identificação de ameaças
+### 4. Monitoramento e Incidentes
+- Eventos suspeitos devem ser reportados imediatamente;
+- Logs de SSH, autenticação e sudo revisados semanalmente.
 
-
-### 3.2 Alunos
-- Ética digital, consequências, boas práticas
+## 🧱 Conformidade Legal e Ética
+Conformidade com **LGPD (Lei 13.709/2018)**, **ISO/IEC 27002** e normas internas da instituição.
