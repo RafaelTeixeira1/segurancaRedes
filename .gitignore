@@ -1,0 +1,5 @@
+
+# Ignorar evidências grandes
+*.pcap
+*.log
+evidencias/*
