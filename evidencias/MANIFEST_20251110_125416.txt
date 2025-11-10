@@ -1,0 +1,31 @@
+Manifest for run at: Mon Nov 10 18:54:16 UTC 2025
+REPO_ROOT=/home/kalilinux/Desktop/segurancaRedes
+IP_VITIMA=192.168.56.101
+USER_VITIMA=linuxmint
+WORDLIST=wordlists/minhaLista.txt
+
+[auto-detect] INTERFACE='eth0'
+evidencias/01_NMAP_20251110_125416/nmap_full_192.168.56.101_2025-11-10_125416.xml
+evidencias/01_NMAP_20251110_125416/nmap_full_192.168.56.101_2025-11-10_125416.gnmap
+evidencias/01_NMAP_20251110_125416/nmap_full_192.168.56.101_2025-11-10_125416.nmap
+
+704e5e5b3234433c01fcfd1b20a306e77e985038120492dc53965c3edd38a4ea  evidencias/02_PRE_CAPTURE_20251110_125416.pcap
+FILE: evidencias/02_PRE_CAPTURE_20251110_125416.pcap
+DESCRIPTION: pre-attack capture (30s)
+----
+Aviso: scripts/ssh_bruteforce.sh não encontrado/executável
+Aviso: scripts/ssh_try_sequential.sh não encontrado/executável
+a97e8b56900c1e6e5e0222746cf0216ba5a7a6fd842444cbf9f9dabbd489de47  evidencias/05_POST_CAPTURE_20251110_125416.pcap
+FILE: evidencias/05_POST_CAPTURE_20251110_125416.pcap
+DESCRIPTION: post-attack capture (30s)
+----
+Aviso: scripts/simula_usb_and_execute.sh não encontrado/executável
+Aviso: scripts/demo_web_unfiltered.sh não encontrado/executável
+Aviso: scripts/coleta_evidencias.sh não encontrado/executável
+
+=== SHA256 FOR ALL EVIDENCE FILES (recursive) ===
+a6e56de20e83664a4eecbd2b24247608573a460c75225e240095540a81aec1ca  evidencias/01_NMAP_20251110_125416/nmap_full_192.168.56.101_2025-11-10_125416.gnmap
+4c555b0a90ceb25c1d0ee0d378c8e4a4c6a6a91dd5f2ae09907eda37c4f96c1c  evidencias/01_NMAP_20251110_125416/nmap_full_192.168.56.101_2025-11-10_125416.nmap
+00de734ca828af185f79b036caaa34ac70a5de8622ed499ecf81279de236ece5  evidencias/01_NMAP_20251110_125416/nmap_full_192.168.56.101_2025-11-10_125416.xml
+704e5e5b3234433c01fcfd1b20a306e77e985038120492dc53965c3edd38a4ea  evidencias/02_PRE_CAPTURE_20251110_125416.pcap
+a97e8b56900c1e6e5e0222746cf0216ba5a7a6fd842444cbf9f9dabbd489de47  evidencias/05_POST_CAPTURE_20251110_125416.pcap

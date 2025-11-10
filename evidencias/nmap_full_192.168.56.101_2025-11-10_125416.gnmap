@@ -1,0 +1,4 @@
+# Nmap 7.95 scan initiated Mon Nov 10 12:54:16 2025 as: /usr/lib/nmap/nmap -sS -p- -sV -T4 --script default -oA evidencias/01_NMAP_20251110_125416/nmap_full_192.168.56.101_2025-11-10_125416 192.168.56.101
+Host: 192.168.56.101 ()	Status: Up
+Host: 192.168.56.101 ()	Ports: 22/open/tcp//ssh//OpenSSH 8.9p1 Ubuntu 3ubuntu0.13 (Ubuntu Linux; protocol 2.0)/	Ignored State: closed (65534)
+# Nmap done at Mon Nov 10 12:54:22 2025 -- 1 IP address (1 host up) scanned in 6.33 seconds

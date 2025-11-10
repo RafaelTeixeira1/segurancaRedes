@@ -1,0 +1,161 @@
++ set -euo pipefail
++ INTERFACE=
++ IP_VITIMA=192.168.56.101
++ USER_VITIMA=linuxmint
++ WORDLIST=wordlists/minhaLista.txt
++ EVID_ROOT=evidencias
++ SLEEP_AFTER_STEP=3
++ REMOTE_RUN=false
++ VITIMA_PASS=linuxmint
++ SSH_OPTS='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
++++ dirname ./run_all_attacks.sh
+++ cd .
+++ pwd
++ REPO_ROOT=/home/kalilinux/Desktop/segurancaRedes
++ cd /home/kalilinux/Desktop/segurancaRedes
+++ now
+++ date +%Y%m%d_%H%M%S
++ ts=20251110_125416
++ mkdir -p evidencias
++ chmod 700 evidencias
++ manifest=evidencias/MANIFEST_20251110_125416.txt
+++ date -u
++ echo 'Manifest for run at: Mon Nov 10 18:54:16 UTC 2025'
++ echo REPO_ROOT=/home/kalilinux/Desktop/segurancaRedes
++ echo IP_VITIMA=192.168.56.101
++ echo USER_VITIMA=linuxmint
++ echo WORDLIST=wordlists/minhaLista.txt
++ echo ''
++ '[' -z '' ']'
+++ printf %s 192.168.56.101
+++ awk -F. '{print $1"."$2"."$3}'
++ vip_prefix=192.168.56
+++ ip -o -4 addr show
+++ awk -v pref=192.168.56 '
+    { split($4, a, "/"); split(a[1], b, "."); prefix=b[1]"."b[2]"."b[3];
+      if (prefix==pref) { print $2; exit } }
+  '
++ IFACE_DET=eth0
++ '[' -z eth0 ']'
++ INTERFACE=eth0
++ echo '[auto-detect] INTERFACE='\''eth0'\'''
++ echo '[00] Início da execução. Timestamp: 20251110_125416'
+[00] Início da execução. Timestamp: 20251110_125416
++ echo '[00] Usando INTERFACE='\''eth0'\'' IP_VITIMA='\''192.168.56.101'\'' USER_VITIMA='\''linuxmint'\'''
+[00] Usando INTERFACE='eth0' IP_VITIMA='192.168.56.101' USER_VITIMA='linuxmint'
++ step1_dir=evidencias/01_NMAP_20251110_125416
++ mkdir -p evidencias/01_NMAP_20251110_125416
++ echo '[01/08] Executando enumeração Nmap -> evidencias/01_NMAP_20251110_125416'
+[01/08] Executando enumeração Nmap -> evidencias/01_NMAP_20251110_125416
++ '[' -x ./scripts/nmap_enum.sh ']'
++ ./scripts/nmap_enum.sh 192.168.56.101 evidencias/01_NMAP_20251110_125416
+[*] Nmap scan on 192.168.56.101 -> evidencias/01_NMAP_20251110_125416/nmap_full_192.168.56.101_2025-11-10_125416.* (SAFE=1)
+Starting Nmap 7.95 ( https://nmap.org ) at 2025-11-10 12:54 CST
+Nmap scan report for 192.168.56.101
+Host is up (0.00021s latency).
+Not shown: 65534 closed tcp ports (reset)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.9p1 Ubuntu 3ubuntu0.13 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   256 1c:e4:e0:89:ee:da:51:aa:d3:f8:6a:05:f0:f9:14:ff (ECDSA)
+|_  256 67:d1:83:a5:31:48:66:84:8d:0e:85:ee:fd:38:98:10 (ED25519)
+MAC Address: 08:00:27:16:CE:A2 (PCS Systemtechnik/Oracle VirtualBox virtual NIC)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 6.33 seconds
+[*] Scan finalizado. Resultados: evidencias/01_NMAP_20251110_125416/nmap_full_192.168.56.101_2025-11-10_125416.nmap  evidencias/01_NMAP_20251110_125416/nmap_full_192.168.56.101_2025-11-10_125416.xml  evidencias/01_NMAP_20251110_125416/nmap_full_192.168.56.101_2025-11-10_125416.gnmap
++ sleep 3
++ find evidencias/01_NMAP_20251110_125416 -type f -maxdepth 1 -print
++ echo ''
++ pcap_pre=evidencias/02_PRE_CAPTURE_20251110_125416.pcap
++ echo '[02/08] Captura pré-ataque (30s) -> evidencias/02_PRE_CAPTURE_20251110_125416.pcap'
+[02/08] Captura pré-ataque (30s) -> evidencias/02_PRE_CAPTURE_20251110_125416.pcap
++ ip link show eth0
++ sudo timeout 30 tcpdump -i eth0 -w evidencias/02_PRE_CAPTURE_20251110_125416.pcap
+tcpdump: listening on eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+0 packets captured
+0 packets received by filter
+0 packets dropped by kernel
++ true
++ sleep 3
++ sha256_and_note 'pre-attack capture (30s)' evidencias/02_PRE_CAPTURE_20251110_125416.pcap
++ local 'desc=pre-attack capture (30s)'
++ shift
++ for f in "$@"
++ '[' -e evidencias/02_PRE_CAPTURE_20251110_125416.pcap ']'
++ sha256sum evidencias/02_PRE_CAPTURE_20251110_125416.pcap
++ sha256sum evidencias/02_PRE_CAPTURE_20251110_125416.pcap
++ echo 'FILE: evidencias/02_PRE_CAPTURE_20251110_125416.pcap'
++ echo 'DESCRIPTION: pre-attack capture (30s)'
++ echo ----
++ step3_dir=evidencias/03_SSH_BRUTEFORCE_20251110_125416
++ mkdir -p evidencias/03_SSH_BRUTEFORCE_20251110_125416
++ echo '[03/08] Ataque SSH (bruteforce) -> evidencias/03_SSH_BRUTEFORCE_20251110_125416'
+[03/08] Ataque SSH (bruteforce) -> evidencias/03_SSH_BRUTEFORCE_20251110_125416
++ '[' -x ./scripts/ssh_bruteforce.sh ']'
++ echo 'Aviso: scripts/ssh_bruteforce.sh não encontrado/executável'
++ tee -a evidencias/MANIFEST_20251110_125416.txt
+Aviso: scripts/ssh_bruteforce.sh não encontrado/executável
++ sleep 3
++ step4_dir=evidencias/04_SSH_SEQUENTIAL_20251110_125416
++ mkdir -p evidencias/04_SSH_SEQUENTIAL_20251110_125416
++ echo '[04/08] Tentativas SSH sequenciais -> evidencias/04_SSH_SEQUENTIAL_20251110_125416'
+[04/08] Tentativas SSH sequenciais -> evidencias/04_SSH_SEQUENTIAL_20251110_125416
++ '[' -x ./scripts/ssh_try_sequential.sh ']'
++ echo 'Aviso: scripts/ssh_try_sequential.sh não encontrado/executável'
++ tee -a evidencias/MANIFEST_20251110_125416.txt
+Aviso: scripts/ssh_try_sequential.sh não encontrado/executável
++ sleep 3
++ pcap_post=evidencias/05_POST_CAPTURE_20251110_125416.pcap
++ echo '[05/08] Captura pós-ataque (30s) -> evidencias/05_POST_CAPTURE_20251110_125416.pcap'
+[05/08] Captura pós-ataque (30s) -> evidencias/05_POST_CAPTURE_20251110_125416.pcap
++ ip link show eth0
++ sudo timeout 30 tcpdump -i eth0 -w evidencias/05_POST_CAPTURE_20251110_125416.pcap
+tcpdump: listening on eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+3 packets captured
+4 packets received by filter
+0 packets dropped by kernel
++ true
++ sleep 3
++ sha256_and_note 'post-attack capture (30s)' evidencias/05_POST_CAPTURE_20251110_125416.pcap
++ local 'desc=post-attack capture (30s)'
++ shift
++ for f in "$@"
++ '[' -e evidencias/05_POST_CAPTURE_20251110_125416.pcap ']'
++ sha256sum evidencias/05_POST_CAPTURE_20251110_125416.pcap
++ sha256sum evidencias/05_POST_CAPTURE_20251110_125416.pcap
++ echo 'FILE: evidencias/05_POST_CAPTURE_20251110_125416.pcap'
++ echo 'DESCRIPTION: post-attack capture (30s)'
++ echo ----
++ step6_dir=evidencias/06_USB_SIMULATION_20251110_125416
++ mkdir -p evidencias/06_USB_SIMULATION_20251110_125416
++ echo '[06/08] Simulação USB -> evidencias/06_USB_SIMULATION_20251110_125416'
+[06/08] Simulação USB -> evidencias/06_USB_SIMULATION_20251110_125416
++ '[' false = true ']'
++ '[' -x ./scripts/simula_usb_and_execute.sh ']'
++ echo 'Aviso: scripts/simula_usb_and_execute.sh não encontrado/executável'
++ tee -a evidencias/MANIFEST_20251110_125416.txt
+Aviso: scripts/simula_usb_and_execute.sh não encontrado/executável
++ sleep 3
++ step7_dir=evidencias/07_WEB_UNFILTERED_20251110_125416
++ mkdir -p evidencias/07_WEB_UNFILTERED_20251110_125416
++ echo '[07/08] Demo web unfiltered -> evidencias/07_WEB_UNFILTERED_20251110_125416'
+[07/08] Demo web unfiltered -> evidencias/07_WEB_UNFILTERED_20251110_125416
++ '[' -x ./scripts/demo_web_unfiltered.sh ']'
++ tee -a evidencias/MANIFEST_20251110_125416.txt
++ echo 'Aviso: scripts/demo_web_unfiltered.sh não encontrado/executável'
+Aviso: scripts/demo_web_unfiltered.sh não encontrado/executável
++ sleep 3
++ step8_dir=evidencias/08_COLETA_EVIDENCIAS_20251110_125416
++ mkdir -p evidencias/08_COLETA_EVIDENCIAS_20251110_125416
++ echo '[08/08] Coleta padronizada de evidências -> evidencias/08_COLETA_EVIDENCIAS_20251110_125416'
+[08/08] Coleta padronizada de evidências -> evidencias/08_COLETA_EVIDENCIAS_20251110_125416
++ '[' false = true ']'
++ '[' -x ./scripts/coleta_evidencias.sh ']'
++ echo 'Aviso: scripts/coleta_evidencias.sh não encontrado/executável'
++ tee -a evidencias/MANIFEST_20251110_125416.txt
+Aviso: scripts/coleta_evidencias.sh não encontrado/executável
++ sleep 3
++ echo 'Execução completa. Manifesto em: evidencias/MANIFEST_20251110_125416.txt'
+Execução completa. Manifesto em: evidencias/MANIFEST_20251110_125416.txt
