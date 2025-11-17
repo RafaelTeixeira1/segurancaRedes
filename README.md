@@ -53,12 +53,17 @@ segurancaRedes/
 │   ├── capture_ssh_traffic.sh       # Captura de tráfego SSH
 │   ├── coleta_evidencias.sh         # Coleta padronizada de evidências
 │   └── hardening_lab.sh             # Endurecimento (mitigação automática)
-├── wordlists/                       # Wordlists (minhaLista.txt)
+├── provisioning/                    # Scripts de provisionamento das VMs
+│   ├── attacker_provision.sh        # Provisionamento atacante
+│   ├── victim_provision.sh          # Provisionamento vitima
+├── wordlists/                       # Pasta com a lista para teste de força bruta
+│   └── minhaLista.txt               
 ├── evidencias/                      # Saídas dos experimentos (pcap, logs, hashes)
 ├── docs/                            # Relatórios e políticas
-│   ├── RELATORIO_AUDITORIA.md
-│   ├── politicas/POLITICA_SEGURANCA.md
-│   └── diagramas/
+│   ├── Plano_Politicas.md
+│   ├── Relatorio_Auditoria_Forense.md
+│   └── Treinamento_Alunos.md
+│   └── Treinamento_Professores.md
 ```
 
 ---
