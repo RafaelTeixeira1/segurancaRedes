@@ -157,14 +157,13 @@ bash scripts/ssh_bruteforce.sh 192.168.56.101 linuxmint wordlists/minhaLista.txt
 
 ---
 
-### V#2 — Enumeração de portas e serviços
+### V#2 — Falta de proteção contra brute-force (mesmo teste do V#1)
 
 ```bash
-# Na VM atacante
-bash scripts/nmap_enum.sh 192.168.56.101 evidencias
+Não precisa de outro script.
 ```
 
-**Resultado esperado:** lista de portas (ex.: 22) e serviços que podem ser vetores.
+**Resultado esperado:** centenas de tentativas sem bloqueio → servidor vulnerável a ataques contínuos.
 
 ---
 
