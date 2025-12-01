@@ -167,36 +167,36 @@ Não precisa de outro script.
 
 ---
 
-### V#3 — Pendrive malicioso (simulação)
+### V#3 — Exposição de portas e serviços
+
+```bash
+# Na VM atacante
+bash scripts/nmap_enum.sh 192.168.56.101 evidencias
+```
+
+**Resultado:** lista de portas abertas (ex.: SSH, CUPS, Avahi, etc.) que podem ser vetores de ataque.
+
+---
+
+### V#4 — Pendrive malicioso (simulação USB)
 
 ```bash
 # Na VM vítima
 sudo bash scripts/simula_usb_and_execute.sh evidencias
 ```
 
-**Resultado:** script foi executado automaticamente (simulação), demonstrando risco.
+**Resultado:** simulação de execução automática, mostrando o risco de dispositivos desconhecidos.
 
 ---
 
-### V#4 — Navegação sem filtro
+### V#5 — Navegação sem filtro (web sem restrição)
 
 ```bash
-# Na VM atacante (ou vítima, dependendo do teste)
+# Na VM atacante (ou vítima)
 bash scripts/demo_web_unfiltered.sh http://example.com 30
 ```
 
-**Resultado:** captura de tráfego web / páginas acessadas.
-
----
-
-### V#5 — Restrição de privilégios (mitigação)
-
-```bash
-# Na VM vítima (após análise)
-sudo bash scripts/create_restricted_user.sh novo_usuario
-```
-
-**Resultado:** usuário com shell restrito, sem sudo nem acesso a dispositivos removíveis.
+**Resultado:** captura de tráfego web e comprovação de que não existe filtro de conteúdo.
 
 ---
 
