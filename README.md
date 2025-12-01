@@ -85,7 +85,7 @@ Um aluno observou a senha SSH de um professor e a utilizou para acessar remotame
 
 | ID  | Categoria              | Descrição                                            | Severidade | Script / Ferramenta                         |
 |-----|------------------------|------------------------------------------------------|------------|---------------------------------------------|
-| V#1 | Autenticação           | Senhas fracas e ausência de MFA em SSH               | Crítica    | `ssh_bruteforce.sh`                          |
+| V#1 | Autenticação           | Senhas fracas               | Crítica    | `ssh_bruteforce.sh`                          |
 | V#2 | Exposição de serviços  | Portas abertas e serviços desnecessários             | Alta       | `nmap_enum.sh`                               |
 | V#3 | Ausência de proteção contra brute-force           | SSH permite tentativas ilimitadas de login sem bloqueio              | Crítica    | `ssh_bruteforce.sh`                 |
 | V#4 | Forense / Evidência    | Ausência de procedimentos de coleta de evidências    | Alta       | `coleta_evidencias.sh`                       |
